@@ -1,4 +1,5 @@
-function Customer(fullName, password, dob, email, gender, phone, orderType, orderOption, imageUrl) {
+
+function customer (fullName, password, dob, email, gender, phone, orderType, orderOption, imageUrl){ //*
   this.fullName = fullName;
   this.password = password;
   this.dob = dob;
@@ -7,142 +8,188 @@ function Customer(fullName, password, dob, email, gender, phone, orderType, orde
   this.phone = phone;
   this.orderType = orderType;
   this.orderOption = orderOption;
-  this.imageUrl = imageUrl;
+  this.imageUrl = imageUrl; //*
 }
 
-function run() {
-  const cardsSection = document.getElementById('customer-cards');
-  cardsSection.textContent = '';
 
-  const storedOrders = localStorage.getItem('customerOrders');
-  const customerOrders = storedOrders ? JSON.parse(storedOrders) : [];
-
-  customerOrders.forEach((customer) => {
-    const card = document.createElement('div');
-    card.classList.add('card');
-
-    const img = document.createElement('img');
-    img.src = customer.imageUrl || 'assets/default-avatar.png';
-    img.alt = `${customer.fullName}'s image`;
-
-    const name = document.createElement('p');
-    name.textContent = `Full Name: ${customer.fullName}`;
-
-    const password = document.createElement('p');
-    password.textContent = `Password: ${'*'.repeat(customer.password.length)}`;
-
-    const dob = document.createElement('p');
-    dob.textContent = `Date of Birth: ${customer.dob}`;
-
-    const email = document.createElement('p');
-    dob.textContent = `Email: ${customer.email}`;
-
-
-    const gender = document.createElement('p');
-    gender.textContent = `Gender: ${customer.gender}`;
-
-    const phone = document.createElement('p');
-    phone.textContent = `Phone: ${customer.phone}`;
-
-    const orderType = document.createElement('p');
-    // orderType.textContent = `Order Type: ${customer.orderType.join(' & ')}`;
-    orderType.textContent = `Order Type: ${customer.orderType}`;
-
-
-    const orderOption = document.createElement('p');
-    orderOption.textContent = `Order Option: ${customer.orderOption}`;
-
-    card.appendChild(img);
-    card.appendChild(name);
-    card.appendChild(password);
-    card.appendChild(dob);
-    card.appendChild(email);
-    card.appendChild(gender);
-    card.appendChild(phone);
-    card.appendChild(orderType);
-    card.appendChild(orderOption);
-
-    cardsSection.appendChild(card);
-  });
-}
-
+let customers = [];
 const previousInputs = {};
 
-document.getElementById('order-form').addEventListener('submit', function (sub) {
-  sub.preventDefault();
+let form = document.getElementById("order-form");
+form.addEventListener('submit', function(event){
+  event.preventDefault();
+   
 
-  const fullName = document.getElementById('fullName').value.trim();
-  //validation 
-  if (/\s/.test(fullName)) {
-    alert("Please Enter Name without spaces!");
-    return;
-  }
-  else if (previousInputs.fullName === fullName) {
-    alert("You already entered this full name!");
-    return;
-  }
-
-  const password = document.getElementById('password').value.trim();
-  if (!/(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+[\]{};':"\\|,.<>/?~-])[a-zA-Z\d!@#$%^&*()_+[\]{};':"\\|,.<>/?~-]{8,}$/.test(password)) {
-    alert("Password must be more than 8 characters, including uppercase, a number, and a symbol.");
-    return;
-  }
-  const dob = document.getElementById('dob').value.trim();
-  if (!/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/.test(dob)) {
-    alert("Birthdate must be in the format YYYY-MM-DD.");
-    return;
-  }
-  const email = document.getElementById('email').value.trim();
-  if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
-    alert("Please Enter valid email address!");
-    return;
-  }
-  else if (previousInputs.email === email) {
-    alert("You already entered this email!");
-    return;
-  }
-
-  const gender = document.querySelector('input[name="gender"]:checked').value.trim();
-  const phone = document.getElementById('phone').value.trim();
-  if (!/^07\d{8}$/.test(phone)) {
-    alert("Please Enter valid Phon number! ");
-    return;
-  }
-  else if (previousInputs.phone === phone) {
-    alert("You already entered this phone number!");
-    return;
-  }
-  previousInputs.fullName = fullName;
-  previousInputs.email = email;
-  previousInputs.phone = phone;
+// validation : 
   
 
+let fullName = document.getElementById("fullName").value;
+     if (/\s/.test(fullName)) {
+        alert("Please Enter Name without spaces!");
+        return;
+      }
+      else if (previousInputs.fullName === fullName) {
+        alert("You already entered this full name!");
+        return;
+      }
+     
 
-  // const orderType = Array.from(document.querySelectorAll('input[name="orderType"]:checked')).map(
-  //   (checkbox) => checkbox.value
-  // );
-  const orderType = document.querySelector('input[name="orderType"]:checked').value;
+  let password = document.getElementById('password').value;
+    if (!/(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+[\]{};':"\\|,.<>/?~-])[a-zA-Z\d!@#$%^&*()_+[\]{};':"\\|,.<>/?~-]{8,}$/.test(password)) {
+      alert("Password must be more than 8 characters, including uppercase, a number, and a symbol.");
+      return;
+    }
 
-  const orderOption = document.querySelector('input[name="orderOption"]:checked').value;
+    let dob = document.getElementById('dob').value;
+    if (!/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/.test(dob)) {
+      alert("Birthdate must be in the format YYYY-MM-DD.");
+      return;
+    }
 
-  const imageInput = document.getElementById('image');
-  const imageUrl = imageInput.files.length ? URL.createObjectURL(imageInput.files[0]) : 'assets/default-avatar.png';
+    let email = document.getElementById('email').value;
+    if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
+      alert("Please Enter valid email address!");
+      return;
+    }
+    else if (previousInputs.email === email) {
+      alert("You already entered this email!");
+      return;
+    }
+  
+  
+    let gender = document.querySelector('input[name="gender"]:checked').value;
+    let phone = document.getElementById('phone').value.trim();
+    if (!/^07\d{8}$/.test(phone)) {
+      alert("Please Enter valid Phon number! ");
+      return;
+    }
+    else if (previousInputs.phone === phone) {
+      alert("You already entered this phone number!");
+      return;
+    }
+    previousInputs.fullName = fullName;
+    previousInputs.email = email;
+    previousInputs.phone = phone;
+    
+let imageInput = document.getElementById("image");
+let imageUrl = imageInput.files.length
+    ? URL.createObjectURL(imageInput.files[0])
+    : "assets/default-avatar.png";
 
-  const newCustomer = new Customer(fullName, password, dob, email, gender, phone, orderType, orderOption, imageUrl);
+let orderType = Array.from(document.querySelectorAll('input[name="orderType"]:checked')).map(input => input.value);
+let orderOption = document.querySelector('input[name="orderOption"]:checked')?.value;
 
-  const storedOrders = localStorage.getItem('customerOrders');
-  const customerOrders = storedOrders ? JSON.parse(storedOrders) : [];
+let newCustomers = new customer(fullName, password, dob, email, gender, phone, orderType, orderOption, imageUrl);
+customers.push(newCustomers);
+// set local :
+localStorage.setItem('customers', JSON.stringify(customers));
+// card section after submit :
+ let sectionCard = document.getElementById("cards-section");
+ let customerCard = document.createElement("div");
+ customerCard.className="customer-Card";
 
-  customerOrders.push(newCustomer);
-  localStorage.setItem('customerOrders', JSON.stringify(customerOrders));
+ let img = document.createElement("img");
+ img.src = imageUrl;
+ img.alt = "Uploaded image";
 
-  document.getElementById('order-form').reset();
-  run();
+ let Name = document.createElement("h3");
+ Name.textContent = fullName;
+
+ let dobElement = document.createElement('p');
+ dobElement.textContent = `Date of Birthday: ${dob}`; 
+
+let emailElement = document.createElement('p');
+emailElement.textContent = `Email: ${email}`; 
+
+let phoneElement = document.createElement('p');
+phoneElement.textContent = `Phone: ${phone}`;
+
+let genderElement = document.createElement('p');
+genderElement.textContent = `Gender: ${gender}`;
+
+let orderTypeElement = document.createElement("p");
+orderTypeElement.textContent=`orderType: ${orderType.join(', ')}`;
+
+let orderOptionElement = document.createElement("p");
+orderOptionElement.textContent=`orderOption: ${orderOption}`;
+
+
+customerCard.appendChild(img);
+customerCard.appendChild(Name);
+customerCard.appendChild(dobElement);
+customerCard.appendChild(emailElement);
+customerCard.appendChild(phoneElement);
+customerCard.appendChild(genderElement);
+customerCard.appendChild(orderTypeElement);
+customerCard.appendChild(orderOptionElement);
+
+// customerCard.innerHTML = `
+//   <img src="${image}" alt="${fullName}">
+//   <h3>${fullName}</h3>
+//   <p>Email: ${email}</p>
+//   <p>Phone: ${phone}</p>
+//   <p>Gender: ${gender}</p>
+//   <p>Order Type: ${orderType.join(', ')}</p>
+//   <p>Order Option: ${orderOption}</p>
+// `; without appendChild and without using decleared.
+sectionCard.appendChild(customerCard);
 });
 
-function clearName() {
-  localStorage.clear();
-  document.getElementById('customer-cards').textContent = '';
-}
+// get local : 
+function displayData() {
+  let storedData = localStorage.getItem('customers');
+  customers = storedData ? JSON.parse(storedData) : [];
+  let sectionCard = document.getElementById("cards-section");
+  sectionCard.innerHTML = ""; // تنظيف القسم قبل إعادة العرض
 
-run();
+  customers.forEach(customer => {
+      let customerCard = document.createElement("div");
+      customerCard.className = "customer-Card";
+
+      let img = document.createElement("img");
+      img.src = customer.imageUrl;
+      img.alt = "Uploaded image";
+
+      let Name = document.createElement("h3");
+      Name.textContent = customer.fullName;
+
+      let dobElement = document.createElement('p');
+      dobElement.textContent = `Date of Birthday: ${customer.dob}`;
+
+      let emailElement = document.createElement('p');
+      emailElement.textContent = `Email: ${customer.email}`;
+
+      let phoneElement = document.createElement('p');
+      phoneElement.textContent = `Phone: ${customer.phone}`;
+
+      let genderElement = document.createElement('p');
+      genderElement.textContent = `Gender: ${customer.gender}`;
+
+      let orderTypeElement = document.createElement("p");
+      orderTypeElement.textContent = `Order Type: ${customer.orderType.join(', ')}`;
+
+      let orderOptionElement = document.createElement("p");
+      orderOptionElement.textContent = `Order Option: ${customer.orderOption}`;
+
+      customerCard.appendChild(img);
+      customerCard.appendChild(Name);
+      customerCard.appendChild(dobElement);
+      customerCard.appendChild(emailElement);
+      customerCard.appendChild(phoneElement);
+      customerCard.appendChild(genderElement);
+      customerCard.appendChild(orderTypeElement);
+      customerCard.appendChild(orderOptionElement);
+
+      sectionCard.appendChild(customerCard);
+  });
+}
+displayData();
+
+
+
+function clearName(){
+  localStorage.clear();
+  customers = [];
+  document.getElementById("order-form").reset(); //برجع الفورم فاضي
+  document.getElementById("cards-section").innerHTML = ""; //ببطل في كارد بالسكشن  
+};
