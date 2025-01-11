@@ -81,15 +81,15 @@ button:hover {
   background-color: #555;
 }
 
-.cards-section {
+#cards-section {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
   justify-content: center;
 }
 
-.card {
-  background-color: #f39e50;
+.customer-Card {
+  background-color: #50f3f3;
   padding: 1rem;
   width: 300px;
   border-radius: 8px;
@@ -97,15 +97,22 @@ button:hover {
   text-align: center;
 }
 
-.card img {
+.customer-Card img {
   width: 100%;
   height: auto;
   margin-bottom: 10px;
 }
 
-.card p {
+.customer-Card h3 {
+  margin: 8px 0;
+  font-size: 1.2em;
+}
+
+.customer-Card p {
   margin: 5px 0;
 }
+
+
 
 footer {
   background-color: #333;
@@ -115,3 +122,4 @@ footer {
   bottom: 0;
   width: 100%;
 }
+
